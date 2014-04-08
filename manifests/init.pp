@@ -72,16 +72,43 @@ class haproxy (
   $global_options   = $haproxy::params::global_options,
   $defaults_options = $haproxy::params::defaults_options,
   $package_name     = 'haproxy',
-  $restart_command  = undef
+  $restart_command  = undef,
+  $custom_source_location = '',
+  $custom_source_release  = '',
+  $custom_source_repo     = '',
+  $custom_source_is_backport = false
 ) inherits haproxy::params {
   include concat::setup
 
-  package { $package_name:
-    ensure  => $enable ? {
-      true  => present,
-      false => absent,
-    },
-    alias   => 'haproxy',
+  if ($customer_source_location == '') {
+    package { $package_name:
+      ensure  => $enable ? {
+        true  => present,
+        false => absent,
+      },
+      alias   => 'haproxy',
+    }
+  else {
+    include apt
+
+    apt::source { 'haproxy':
+      location => $custom_source_location,
+      release => $custom_source_release,
+      repos => $custom_source_repo,
+      include_src => false
+    }a
+
+    package { $package_name:
+      ensure  => $enable ? {
+        true  => present,
+        false => absent,
+      },
+      install_options => $custom_source_is_backport ? {
+        true => ["-t"],
+        false => []
+      },
+      alias   => 'haproxy'
+    }
   }
 
   if $enable {
