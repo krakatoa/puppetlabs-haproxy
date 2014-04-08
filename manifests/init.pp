@@ -88,7 +88,7 @@ class haproxy (
       },
       alias   => 'haproxy',
     }
-  else {
+  } else {
     include apt
 
     apt::source { 'haproxy':
@@ -96,7 +96,7 @@ class haproxy (
       release => $custom_source_release,
       repos => $custom_source_repo,
       include_src => false
-    }a
+    }
 
     package { $package_name:
       ensure  => $enable ? {

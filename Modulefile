@@ -1,5 +1,5 @@
 name    'krakatoa-haproxy'
-version '0.4.1'
+version '0.4.2'
 source 'git://github.com/krakatoa1987/puppetlabs-haproxy'
 author 'Puppet Labs'
 license 'Apache License, Version 2.0'
